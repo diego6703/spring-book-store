@@ -5,8 +5,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Repository;
-import p.projects.springbootbookstore.model.Book;
-import p.projects.springbootbookstore.repository.BookRepository;
+import p.projects.springbookstore.model.Book;
+import p.projects.springbookstore.repository.BookRepository;
 
 @Repository
 public class BookRepositoryImpl implements BookRepository {

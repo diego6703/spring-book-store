@@ -1,7 +1,7 @@
 package p.projects.springbookstore.repository;
 
 import java.util.List;
-import p.projects.springbootbookstore.model.Book;
+import p.projects.springbookstore.model.Book;
 
 public interface BookRepository {
 

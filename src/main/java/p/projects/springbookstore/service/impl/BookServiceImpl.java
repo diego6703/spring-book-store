@@ -2,9 +2,9 @@ package p.projects.springbookstore.service.impl;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import p.projects.springbootbookstore.model.Book;
-import p.projects.springbootbookstore.repository.BookRepository;
-import p.projects.springbootbookstore.service.BookService;
+import p.projects.springbookstore.model.Book;
+import p.projects.springbookstore.repository.BookRepository;
+import p.projects.springbookstore.service.BookService;
 
 @Service
 public class BookServiceImpl implements BookService {

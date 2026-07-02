@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import p.projects.springbookstore.dto.BookDto;
 import p.projects.springbookstore.dto.CreateBookRequestDto;
+import p.projects.springbookstore.exception.EntityNotFoundException;
 import p.projects.springbookstore.mapper.BookMapper;
 import p.projects.springbookstore.model.Book;
 import p.projects.springbookstore.repository.BookRepository;
@@ -30,5 +31,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public BookDto getBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
+
+        return bookMapper.toDto(book);
     }
 }

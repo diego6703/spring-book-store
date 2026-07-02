@@ -1,5 +1,6 @@
 package p.projects.springbookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import p.projects.springbookstore.model.Book;
@@ -15,6 +16,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book save(Book book) {
         return bookRepository.save(book);
     }

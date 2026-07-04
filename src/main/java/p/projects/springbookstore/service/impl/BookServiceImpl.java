@@ -45,7 +45,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(Long id, UpdateBookRequestDto requestDto) {
+    @Transactional
+    public BookDto updateBookById(Long id, UpdateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find book with id: " + id));
         bookMapper.updateBookFromDto(requestDto, book);
@@ -53,7 +54,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBook(Long id) {
+    @Transactional
+    public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
     }
 }

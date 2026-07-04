@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import p.projects.springbookstore.dto.BookDto;
 import p.projects.springbookstore.dto.CreateBookRequestDto;
@@ -26,29 +25,30 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
-        return bookService.save(requestDto);
+    public ResponseEntity<BookDto> createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.save(requestDto));
     }
 
     @GetMapping
-    public List<BookDto> getAll() {
-        return bookService.findAll();
+    public ResponseEntity<List<BookDto>> getAll() {
+        return ResponseEntity.ok(bookService.findAll());
     }
 
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long id,
-                                              @Valid @RequestBody UpdateBookRequestDto requestDto) {
-        return ResponseEntity.ok(bookService.update(id, requestDto));
+    public ResponseEntity<BookDto> updateBookById(@PathVariable Long id,
+                                                  @Valid @RequestBody
+                                                  UpdateBookRequestDto requestDto) {
+        return ResponseEntity.ok(bookService.updateBookById(id, requestDto));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        bookService.deleteBook(id);
+    public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
+        bookService.deleteBookById(id);
+        return ResponseEntity.noContent().build();
     }
 }

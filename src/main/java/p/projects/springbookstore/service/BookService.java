@@ -13,7 +13,7 @@ public interface BookService {
 
     BookDto getBookById(Long id);
 
-    BookDto update(Long id, UpdateBookRequestDto requestDto);
+    BookDto updateBookById(Long id, UpdateBookRequestDto requestDto);
 
-    void deleteBook(Long id);
+    void deleteBookById(Long id);
 }

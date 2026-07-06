@@ -25,9 +25,9 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder {
     public Specification<Book> build(BookSearchParametersDto searchParameters) {
         List<Specification<Book>> specs = new ArrayList<>();
 
-        addSpecificationIfValid(specs, "title", searchParameters.title());
-        addSpecificationIfValid(specs, "author", searchParameters.author());
-        addSpecificationIfValid(specs, "isbn", searchParameters.isbn());
+        addSpecificationIfValid(specs, "titles", searchParameters.titles());
+        addSpecificationIfValid(specs, "authors", searchParameters.authors());
+        addSpecificationIfValid(specs, "isbns", searchParameters.isbns());
 
         return specs.stream()
                 .reduce(Specification::and)

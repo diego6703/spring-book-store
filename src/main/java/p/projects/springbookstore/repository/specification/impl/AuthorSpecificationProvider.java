@@ -14,7 +14,7 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
         return (root, query, criteriaBuilder) -> {
             Predicate[] predicates = Arrays.stream(params)
                     .map(param -> criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("author")),
+                            criteriaBuilder.lower(root.get("authors")),
                             "%" + param.toLowerCase() + "%"
                     ))
                     .toArray(Predicate[]::new);
@@ -24,6 +24,6 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
 
     @Override
     public String getKey() {
-        return "author";
+        return "authors";
     }
 }

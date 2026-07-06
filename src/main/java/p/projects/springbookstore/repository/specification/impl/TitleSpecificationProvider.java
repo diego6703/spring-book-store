@@ -14,7 +14,7 @@ public class TitleSpecificationProvider implements SpecificationProvider<Book> {
         return (root, query, criteriaBuilder) -> {
             Predicate[] predicates = Arrays.stream(params)
                     .map(param -> criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("title")),
+                            criteriaBuilder.lower(root.get("titles")),
                             "%" + param.toLowerCase() + "%"
                     ))
                     .toArray(Predicate[]::new);
@@ -24,6 +24,6 @@ public class TitleSpecificationProvider implements SpecificationProvider<Book> {
 
     @Override
     public String getKey() {
-        return "title";
+        return "titles";
     }
 }

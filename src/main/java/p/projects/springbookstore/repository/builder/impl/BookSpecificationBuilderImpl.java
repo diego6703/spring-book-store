@@ -9,14 +9,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import p.projects.springbookstore.dto.BookSearchParametersDto;
 import p.projects.springbookstore.model.Book;
-import p.projects.springbookstore.repository.builder.SpecificationBuilder;
+import p.projects.springbookstore.repository.builder.BookSpecificationBuilder;
 import p.projects.springbookstore.repository.specification.SpecificationProvider;
 
 @Component
-public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+public class BookSpecificationBuilderImpl implements BookSpecificationBuilder {
     private final Map<String, SpecificationProvider<Book>> providerMap;
 
-    public BookSpecificationBuilder(List<SpecificationProvider<Book>> providers) {
+    public BookSpecificationBuilderImpl(List<SpecificationProvider<Book>> providers) {
         this.providerMap = providers.stream()
                 .collect(Collectors.toMap(SpecificationProvider::getKey, p -> p));
     }

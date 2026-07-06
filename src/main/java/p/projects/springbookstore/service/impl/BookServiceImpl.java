@@ -64,6 +64,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDto> search(BookSearchParametersDto params) {
         Specification<Book> bookSpecification = specificationBuilder.build(params);
         return bookRepository.findAll(bookSpecification).stream()

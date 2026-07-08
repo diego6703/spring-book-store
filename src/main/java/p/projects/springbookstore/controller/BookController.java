@@ -1,8 +1,10 @@
 package p.projects.springbookstore.controller;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,8 +33,9 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDto>> getAll() {
-        return ResponseEntity.ok(bookService.findAll());
+    public ResponseEntity<Page<BookDto>> getAll(@PageableDefault(size = 20, sort = "title")
+                                                    Pageable pageable) {
+        return ResponseEntity.ok(bookService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -54,7 +57,9 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    public ResponseEntity<Page<BookDto>> searchBooks(
+            BookSearchParametersDto searchParameters,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(bookService.search(searchParameters, pageable));
     }
 }

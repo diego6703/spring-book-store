@@ -71,7 +71,7 @@ public class BookController {
     @Operation(summary = "Search books", description = "Search books by specific parameters")
     public Page<BookDto> searchBooks(
             @ParameterObject BookSearchParametersDto searchParameters,
-            @ParameterObject @PageableDefault(size = 20) Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 20, sort = "title") Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }
 }

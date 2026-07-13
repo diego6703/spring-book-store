@@ -5,9 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import p.projects.springbookstore.annotation.FieldMatch;
 
 @Getter
 @Setter
+@FieldMatch(
+        field = "password",
+        fieldMatch = "repeatPassword",
+        message = "Passwords must match"
+)
 public class UserRegistrationRequestDto {
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Invalid email format")

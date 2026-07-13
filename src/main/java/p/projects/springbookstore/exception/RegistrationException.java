@@ -1,0 +1,7 @@
+package p.projects.springbookstore.exception;
+
+public class RegistrationException extends RuntimeException {
+    public RegistrationException(String message) {
+        super(message);
+    }
+}

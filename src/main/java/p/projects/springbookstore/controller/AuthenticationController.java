@@ -13,7 +13,7 @@ import p.projects.springbookstore.service.AuthenticationService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 

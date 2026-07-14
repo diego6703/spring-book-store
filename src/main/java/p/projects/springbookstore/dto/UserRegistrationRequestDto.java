@@ -2,35 +2,33 @@ package p.projects.springbookstore.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Size;
 import p.projects.springbookstore.annotation.FieldMatch;
 
-@Getter
-@Setter
 @FieldMatch(
         field = "password",
         fieldMatch = "repeatPassword",
         message = "Passwords must match"
 )
-public class UserRegistrationRequestDto {
-    @NotBlank(message = "Email cannot be empty")
-    @Email(message = "Invalid email format")
-    private String email;
+public record UserRegistrationRequestDto(
+        @NotBlank(message = "Email cannot be blank")
+        @Email(message = "Invalid email format")
+        String email,
 
-    @NotBlank(message = "Password cannot be empty")
-    @Length(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
-    private String password;
+        @NotBlank(message = "Password cannot be blank")
+        @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
+        String password,
 
-    @NotBlank(message = "Repeat password cannot be empty")
-    private String repeatPassword;
+        @NotBlank(message = "Repeat password cannot be blank")
+        @Size(min = 8, max = 20, message = "Repeat password must be between 8 and 20 characters")
+        String repeatPassword,
 
-    @NotBlank(message = "First name cannot be empty")
-    private String firstName;
+        @NotBlank(message = "First name cannot be blank")
+        String firstName,
 
-    @NotBlank(message = "Last name cannot be empty")
-    private String lastName;
+        @NotBlank(message = "Last name cannot be blank")
+        String lastName,
 
-    private String shippingAddress;
+        String shippingAddress
+) {
 }

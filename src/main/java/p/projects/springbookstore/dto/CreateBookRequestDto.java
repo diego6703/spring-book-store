@@ -13,15 +13,15 @@ import org.hibernate.validator.constraints.URL;
 @Getter
 @Setter
 public class CreateBookRequestDto {
-    @NotBlank(message = "Title cannot be empty")
+    @NotBlank(message = "Title cannot be blank")
     @Size(max = 255, message = "Title is too long")
     private String title;
 
-    @NotBlank(message = "Author cannot be empty")
+    @NotBlank(message = "Author cannot be blank")
     @Size(max = 255, message = "Author name is too long")
     private String author;
 
-    @NotBlank(message = "ISBN cannot be empty")
+    @NotBlank(message = "ISBN cannot be blank")
     @Pattern(regexp = "^[0-9]{13}$", message = "ISBN must be exactly 13 digits")
     private String isbn;
 

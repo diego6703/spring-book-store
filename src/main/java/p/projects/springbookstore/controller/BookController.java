@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new book",
             description = "Creates a new book entity in the system")
@@ -40,6 +42,7 @@ public class BookController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get all books", description = "Returns a paginated list of all books")
     public Page<BookDto> getAll(
             @ParameterObject @PageableDefault(size = 20, sort = "title") Pageable pageable) {
@@ -47,6 +50,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get book by ID",
             description = "Returns book details by its unique identifier")
     public BookDto getBookById(@PathVariable Long id) {
@@ -54,6 +58,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update book", description = "Updates an existing book record")
     public BookDto updateBookById(@PathVariable Long id,
                                   @Valid @RequestBody UpdateBookRequestDto requestDto) {
@@ -61,6 +66,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete book", description = "Removes a book from the system")
     public void deleteBookById(@PathVariable Long id) {
@@ -68,6 +74,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Search books", description = "Search books by specific parameters")
     public Page<BookDto> searchBooks(
             @ParameterObject BookSearchParametersDto searchParameters,

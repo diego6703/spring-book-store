@@ -44,7 +44,7 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "users_roles",
+            name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

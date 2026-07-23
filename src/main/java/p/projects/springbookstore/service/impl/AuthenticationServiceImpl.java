@@ -3,9 +3,14 @@ package p.projects.springbookstore.service.impl;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import p.projects.springbookstore.dto.UserLoginRequestDto;
+import p.projects.springbookstore.dto.UserLoginResponseDto;
 import p.projects.springbookstore.dto.UserRegistrationRequestDto;
 import p.projects.springbookstore.dto.UserResponseDto;
 import p.projects.springbookstore.exception.EntityNotFoundException;
@@ -16,6 +21,7 @@ import p.projects.springbookstore.model.RoleName;
 import p.projects.springbookstore.model.User;
 import p.projects.springbookstore.repository.RoleRepository;
 import p.projects.springbookstore.repository.UserRepository;
+import p.projects.springbookstore.security.JwtUtil;
 import p.projects.springbookstore.service.AuthenticationService;
 
 @Service
@@ -25,6 +31,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
@@ -41,5 +49,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRoles(new HashSet<>(Set.of(userRole)));
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UserLoginResponseDto login(UserLoginRequestDto request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.password()
+                )
+        );
+        String token = jwtUtil.generateToken(authentication);
+        return new UserLoginResponseDto(token);
     }
 }

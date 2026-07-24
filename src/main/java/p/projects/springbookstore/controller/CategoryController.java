@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import p.projects.springbookstore.dto.BookDtoWithoutCategoryIds;
 import p.projects.springbookstore.dto.CategoryDto;
 import p.projects.springbookstore.dto.CreateCategoryRequestDto;
 import p.projects.springbookstore.dto.UpdateCategoryRequestDto;
+import p.projects.springbookstore.service.BookService;
 import p.projects.springbookstore.service.CategoryService;
 
 @Tag(name = "Category management", description = "Endpoints for managing categories")
@@ -30,6 +32,7 @@ import p.projects.springbookstore.service.CategoryService;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+    private final BookService bookService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -72,4 +75,15 @@ public class CategoryController {
     public void deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
+
+    @GetMapping("/{id}/books")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get books by category ID",
+            description = "Returns a paginated list of books belonging to a specific category")
+    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable Long id,
+            @ParameterObject @PageableDefault(size = 20, sort = "title") Pageable pageable) {
+        return bookService.getBooksByCategoryId(id, pageable);
+    }
+
 }

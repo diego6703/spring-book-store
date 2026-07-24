@@ -59,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.password()
                 )
         );
-        String token = jwtUtil.generateToken(authentication);
+        String token = jwtUtil.generateToken(authentication.getName());
         return new UserLoginResponseDto(token);
     }
 }

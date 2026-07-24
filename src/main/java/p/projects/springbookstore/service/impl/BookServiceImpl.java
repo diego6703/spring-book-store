@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import p.projects.springbookstore.dto.BookDto;
+import p.projects.springbookstore.dto.BookDtoWithoutCategoryIds;
 import p.projects.springbookstore.dto.BookSearchParametersDto;
 import p.projects.springbookstore.dto.CreateBookRequestDto;
 import p.projects.springbookstore.dto.UpdateBookRequestDto;
@@ -34,9 +35,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<BookDto> findAll(Pageable pageable) {
+    public Page<BookDtoWithoutCategoryIds> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable)
-                .map(bookMapper::toDto);
+                .map(bookMapper::toDtoWithoutCategories);
     }
 
     @Override

@@ -7,7 +7,7 @@ import p.projects.springbookstore.dto.UserResponseDto;
 
 public interface AuthenticationService {
 
-    public UserResponseDto register(UserRegistrationRequestDto request);
+    UserResponseDto register(UserRegistrationRequestDto request);
 
-    public UserLoginResponseDto login(UserLoginRequestDto request);
+    UserLoginResponseDto login(UserLoginRequestDto request);
 }

@@ -11,7 +11,6 @@ import p.projects.springbookstore.dto.UserLoginRequestDto;
 import p.projects.springbookstore.dto.UserLoginResponseDto;
 import p.projects.springbookstore.dto.UserRegistrationRequestDto;
 import p.projects.springbookstore.dto.UserResponseDto;
-import p.projects.springbookstore.exception.LoginException;
 import p.projects.springbookstore.exception.RegistrationException;
 import p.projects.springbookstore.service.AuthenticationService;
 
@@ -32,8 +31,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "Authenticate user",
             description = "Logs in a user and returns a JWT token")
-    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request)
-            throws LoginException {
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
         return authenticationService.login(request);
     }
 }

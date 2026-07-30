@@ -55,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserLoginResponseDto login(UserLoginRequestDto request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.email(),
+                        request.email().toLowerCase(),
                         request.password()
                 )
         );

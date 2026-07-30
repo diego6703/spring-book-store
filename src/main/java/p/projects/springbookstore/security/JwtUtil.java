@@ -1,8 +1,6 @@
 package p.projects.springbookstore.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -17,11 +15,12 @@ public class JwtUtil {
 
     private final Key secret;
 
-    @Value("${jwt.expiration}")
-    private long expiration;
+    private final long expiration;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretString) {
+    public JwtUtil(@Value("${jwt.secret}") String secretString,
+                   @Value("${jwt.expiration}") long expiration) {
         secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+        this.expiration = expiration;
     }
 
     public String generateToken(String email) {
@@ -33,29 +32,15 @@ public class JwtUtil {
                 .compact();
     }
 
-    public boolean isValidToken(String token) {
-        try {
-            Jws<Claims> claimsJws = getClaims(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    public String getUsernameFromToken(String token) {
+    public Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secret)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
     }
 
-    private Jws<Claims> getClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secret)
-                .build()
-                .parseClaimsJws(token);
+    public String getUsernameFromToken(String token) {
+        return getClaims(token).getSubject();
     }
-
 }

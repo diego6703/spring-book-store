@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,5 +57,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 errors
         );
         return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(
+            AuthenticationException ex) {
+        return buildErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                List.of("Invalid email or password")
+        );
     }
 }

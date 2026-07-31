@@ -21,7 +21,7 @@ databaseChangeLog:
           columns:
             - column: { name: id, value: 1 }
             - column: { name: email, value: "admin@bookstore.com" }
-            - column: { name: password, value: "$2a$10$wB5G4u3T3O1W1.4dK5S43.O9E24/u.R5lW7z0yM7Xo5.8h1cE0Yy2" }
+            - column: { name: password, value: "$2a$12$VUjOiP25WzngcdAvHksEPO7WO9Kg0eo.JOPXmNKJiRWz9yjyi4V0y" }
             - column: { name: first_name, value: "Admin" }
             - column: { name: last_name, value: "Admin" }
       - insert:
@@ -39,7 +39,7 @@ databaseChangeLog:
           columns:
             - column: { name: id, value: 2 }
             - column: { name: email, value: "user@bookstore.com" }
-            - column: { name: password, value: "$2a$10$wB5G4u3T3O1W1.4dK5S43.O9E24/u.R5lW7z0yM7Xo5.8h1cE0Yy2" }
+            - column: { name: password, value: "$2a$12$VUjOiP25WzngcdAvHksEPO7WO9Kg0eo.JOPXmNKJiRWz9yjyi4V0y" }
             - column: { name: first_name, value: "User" }
             - column: { name: last_name, value: "User" }
       - insert:

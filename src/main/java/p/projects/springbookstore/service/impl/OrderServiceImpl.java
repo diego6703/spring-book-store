@@ -9,15 +9,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import p.projects.springbookstore.dto.OrderDto;
+import p.projects.springbookstore.dto.OrderItemDto;
 import p.projects.springbookstore.dto.PlaceOrderRequestDto;
 import p.projects.springbookstore.dto.UpdateOrderStatusRequestDto;
 import p.projects.springbookstore.exception.EntityNotFoundException;
+import p.projects.springbookstore.mapper.OrderItemMapper;
 import p.projects.springbookstore.mapper.OrderMapper;
 import p.projects.springbookstore.model.CartItem;
 import p.projects.springbookstore.model.Order;
 import p.projects.springbookstore.model.OrderItem;
 import p.projects.springbookstore.model.ShoppingCart;
 import p.projects.springbookstore.model.Status;
+import p.projects.springbookstore.repository.OrderItemRepository;
 import p.projects.springbookstore.repository.OrderRepository;
 import p.projects.springbookstore.security.SecurityService;
 import p.projects.springbookstore.service.OrderService;
@@ -31,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final SecurityService securityService;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
     @Transactional
@@ -83,6 +88,16 @@ public class OrderServiceImpl implements OrderService {
         Order updatedOrder = orderRepository.save(order);
 
         return orderMapper.toDto(updatedOrder);
+    }
+
+    public List<OrderItemDto> getOrderItems(Long orderId) {
+        if (!orderRepository.existsById(orderId)) {
+            throw new EntityNotFoundException("Order not found with id: " + orderId);
+        }
+
+        return orderItemRepository.findByOrderId(orderId).stream()
+                .map(orderItemMapper::toDto)
+                .toList();
     }
 
     private OrderItem mapToOrderItem(CartItem cartItem, Order order) {

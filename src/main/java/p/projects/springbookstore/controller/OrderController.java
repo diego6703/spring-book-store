@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import p.projects.springbookstore.dto.OrderDto;
+import p.projects.springbookstore.dto.OrderItemDto;
 import p.projects.springbookstore.dto.PlaceOrderRequestDto;
 import p.projects.springbookstore.dto.UpdateOrderStatusRequestDto;
 import p.projects.springbookstore.service.OrderService;
@@ -37,5 +38,10 @@ public class OrderController {
             @PathVariable Long id,
             @RequestBody @Valid UpdateOrderStatusRequestDto requestDto) {
         return orderService.updateOrderStatus(id, requestDto);
+    }
+
+    @GetMapping("/{id}/items")
+    public List<OrderItemDto> getOrderItems(@PathVariable Long id) {
+        return orderService.getOrderItems(id);
     }
 }

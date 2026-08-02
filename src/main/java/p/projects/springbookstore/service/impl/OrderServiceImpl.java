@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import p.projects.springbookstore.dto.OrderDto;
 import p.projects.springbookstore.dto.PlaceOrderRequestDto;
+import p.projects.springbookstore.dto.UpdateOrderStatusRequestDto;
+import p.projects.springbookstore.exception.EntityNotFoundException;
 import p.projects.springbookstore.mapper.OrderMapper;
 import p.projects.springbookstore.model.CartItem;
 import p.projects.springbookstore.model.Order;
@@ -69,6 +71,18 @@ public class OrderServiceImpl implements OrderService {
         return orders.stream()
                 .map(orderMapper::toDto)
                 .toList();
+    }
+
+    @Transactional
+    public OrderDto updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto requestDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order not found with id: " + orderId));
+
+        order.setStatus(requestDto.status());
+        Order updatedOrder = orderRepository.save(order);
+
+        return orderMapper.toDto(updatedOrder);
     }
 
     private OrderItem mapToOrderItem(CartItem cartItem, Order order) {

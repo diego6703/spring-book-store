@@ -2,6 +2,7 @@ package p.projects.springbookstore.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import p.projects.springbookstore.model.OrderItem;
 import p.projects.springbookstore.model.ShoppingCart;
 import p.projects.springbookstore.model.Status;
 import p.projects.springbookstore.repository.OrderRepository;
+import p.projects.springbookstore.security.SecurityService;
 import p.projects.springbookstore.service.OrderService;
 import p.projects.springbookstore.service.ShoppingCartService;
 
@@ -26,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartService shoppingCartService;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final SecurityService securityService;
 
     @Override
     @Transactional
@@ -55,6 +58,17 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartService.clearCart(cartForCurrentUser);
 
         return orderMapper.toDto(savedOrder);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderDto> getUserOrderHistory() {
+        Long userId = securityService.getAuthenticatedUser().getId();
+        List<Order> orders = orderRepository.findAllByUserId(userId);
+
+        return orders.stream()
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     private OrderItem mapToOrderItem(CartItem cartItem, Order order) {

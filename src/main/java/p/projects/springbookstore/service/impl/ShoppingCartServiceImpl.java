@@ -9,9 +9,11 @@ import p.projects.springbookstore.dto.UpdateCartItemRequestDto;
 import p.projects.springbookstore.exception.EntityNotFoundException;
 import p.projects.springbookstore.mapper.CartItemMapper;
 import p.projects.springbookstore.mapper.ShoppingCartMapper;
+import p.projects.springbookstore.model.Book;
 import p.projects.springbookstore.model.CartItem;
 import p.projects.springbookstore.model.ShoppingCart;
 import p.projects.springbookstore.model.User;
+import p.projects.springbookstore.repository.BookRepository;
 import p.projects.springbookstore.repository.CartItemRepository;
 import p.projects.springbookstore.repository.ShoppingCartRepository;
 import p.projects.springbookstore.security.SecurityService;
@@ -25,6 +27,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final ShoppingCartMapper shoppingCartMapper;
     private final SecurityService securityService;
+    private final BookRepository bookRepository;
+
 
     @Override
     public ShoppingCartDto getCartForCurrentUser() {
@@ -34,6 +38,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseGet(() -> createEmptyCart(userId));
 
         return shoppingCartMapper.toDto(cart);
+    }
+
+    @Override
+    public ShoppingCart getCartEntityForCurrentUser() {
+        Long userId = securityService.getAuthenticatedUserId();
+        return shoppingCartRepository.findByUserId(userId)
+                .orElseGet(() -> createEmptyCart(userId));
     }
 
     @Override
@@ -51,8 +62,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     return existingItem;
                 })
                 .orElseGet(() -> {
+                    Book book = bookRepository.findById(requestDto.bookId())
+                            .orElseThrow(() -> new EntityNotFoundException("Book not found"));
+
                     CartItem newItem = cartItemMapper.toEntity(requestDto);
                     newItem.setShoppingCart(cart);
+                    newItem.setBook(book);
                     return newItem;
                 });
 
@@ -88,5 +103,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Cart item not found with id: " + cartItemId));
         cartItemRepository.delete(cartItem);
+    }
+
+    @Override
+    public void clearCart(ShoppingCart cart) {
+        cart.getCartItems().clear();
+        shoppingCartRepository.save(cart);
     }
 }

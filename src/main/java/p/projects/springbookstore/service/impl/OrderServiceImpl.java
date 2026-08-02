@@ -100,6 +100,13 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    public OrderItemDto getOrderItem(Long orderId, Long itemId) {
+        OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
+
+        return orderItemMapper.toDto(orderItem);
+    }
+
     private OrderItem mapToOrderItem(CartItem cartItem, Order order) {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);

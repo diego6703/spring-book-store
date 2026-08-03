@@ -22,7 +22,7 @@ public class Category {
     private Long id;
 
     @NotBlank
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column

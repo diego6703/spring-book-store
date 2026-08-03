@@ -15,6 +15,7 @@ import p.projects.springbookstore.exception.EntityNotFoundException;
 import p.projects.springbookstore.mapper.BookMapper;
 import p.projects.springbookstore.model.Book;
 import p.projects.springbookstore.repository.BookRepository;
+import p.projects.springbookstore.repository.CategoryRepository;
 import p.projects.springbookstore.repository.builder.BookSpecificationBuilder;
 import p.projects.springbookstore.service.BookService;
 
@@ -22,6 +23,7 @@ import p.projects.springbookstore.service.BookService;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder specificationBuilder;
 
@@ -79,6 +81,9 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             Long categoryId, Pageable pageable) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Can't find category with id: " + categoryId);
+        }
         return bookRepository.findAllByCategoriesId(categoryId, pageable)
                 .map(bookMapper::toDtoWithoutCategories);
     }

@@ -35,9 +35,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<BookDtoWithoutCategoryIds> findAll(Pageable pageable) {
+    public Page<BookDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable)
-                .map(bookMapper::toDtoWithoutCategories);
+                .map(bookMapper::toDto);
     }
 
     @Override

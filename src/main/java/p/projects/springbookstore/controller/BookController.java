@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import p.projects.springbookstore.dto.BookDto;
-import p.projects.springbookstore.dto.BookDtoWithoutCategoryIds;
 import p.projects.springbookstore.dto.BookSearchParametersDto;
 import p.projects.springbookstore.dto.CreateBookRequestDto;
 import p.projects.springbookstore.dto.UpdateBookRequestDto;
@@ -45,7 +44,7 @@ public class BookController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get all books", description = "Returns a paginated list of all books")
-    public Page<BookDtoWithoutCategoryIds> getAll(
+    public Page<BookDto> getAll(
             @ParameterObject @PageableDefault(size = 20, sort = "title") Pageable pageable) {
         return bookService.findAll(pageable);
     }

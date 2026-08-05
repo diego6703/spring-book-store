@@ -7,6 +7,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import p.projects.springbookstore.config.MapperConfig;
 import p.projects.springbookstore.dto.BookDto;
@@ -53,5 +54,15 @@ public interface BookMapper {
                     return category;
                 })
                 .collect(Collectors.toSet());
+    }
+
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Book book = new Book();
+        book.setId(id);
+        return book;
     }
 }

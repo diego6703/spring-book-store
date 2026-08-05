@@ -28,8 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
     private final SecurityService securityService;
     private final BookRepository bookRepository;
-
-
+    
     @Override
     public ShoppingCartDto getCartForCurrentUser() {
         Long userId = securityService.getAuthenticatedUserId();

@@ -37,6 +37,7 @@ public class ShoppingCartController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add item to shopping cart",
             description = "Adds a book with specified quantity to the user's shopping cart")
     public ShoppingCartDto addBookToCart(@RequestBody @Valid AddCartItemRequestDto requestDto) {

@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import p.projects.springbookstore.model.Category;
+import p.projects.springbookstore.repository.CategoryRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -21,10 +23,17 @@ class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Should create book when user has ADMIN role")
     void createBook_asAdmin_returnsCreated() throws Exception {
+        Category category = new Category();
+        category.setName("Fantasy");
+        Category savedCategory = categoryRepository.save(category);
+
         String jsonBook = """
                 {
                     "title": "Clean Code",
@@ -32,7 +41,8 @@ class BookControllerTest {
                     "isbn": "1234567890123",
                     "price": 29.99,
                     "description": "A book about software engineering",
-                    "coverImage": "https://example.com/cover.jpg"
+                    "coverImage": "https://example.com/cover.jpg",
+                    "categoryIds":[1]
                 }
                 """;
 

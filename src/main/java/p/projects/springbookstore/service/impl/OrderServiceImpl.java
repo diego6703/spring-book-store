@@ -78,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
     @Transactional
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto requestDto) {
         Order order = orderRepository.findById(orderId)
@@ -90,6 +91,8 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(updatedOrder);
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public List<OrderItemDto> getOrderItems(Long orderId) {
         if (!orderRepository.existsById(orderId)) {
             throw new EntityNotFoundException("Order not found with id: " + orderId);
@@ -100,6 +103,8 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public OrderItemDto getOrderItem(Long orderId, Long itemId) {
         OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order item not found"));

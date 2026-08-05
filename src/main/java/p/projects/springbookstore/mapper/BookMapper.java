@@ -17,7 +17,7 @@ import p.projects.springbookstore.model.Book;
 import p.projects.springbookstore.model.Category;
 import p.projects.springbookstore.repository.CategoryRepository;
 
-@Mapper(config = MapperConfig.class, uses = CategoryRepository.class)
+@Mapper(config = MapperConfig.class)
 public interface BookMapper {
 
     BookDto toDto(Book book);
@@ -29,7 +29,7 @@ public interface BookMapper {
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        if (book.getCategories() != null) {
+        if (book.getCategories() != null && bookDto.getCategoryIds() != null) {
             bookDto.getCategoryIds().addAll(
                     book.getCategories().stream()
                             .map(Category::getId)

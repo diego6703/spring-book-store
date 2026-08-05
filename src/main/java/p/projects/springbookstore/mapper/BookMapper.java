@@ -15,7 +15,6 @@ import p.projects.springbookstore.dto.CreateBookRequestDto;
 import p.projects.springbookstore.dto.UpdateBookRequestDto;
 import p.projects.springbookstore.model.Book;
 import p.projects.springbookstore.model.Category;
-import p.projects.springbookstore.repository.CategoryRepository;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {

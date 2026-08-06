@@ -67,4 +67,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 List.of("Invalid email or password")
         );
     }
+
+    @ExceptionHandler(EmptyShoppingCartException.class)
+    public ResponseEntity<Object> handleEmptyShoppingCart(EmptyShoppingCartException ex) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                List.of(ex.getMessage())
+        );
+    }
 }

@@ -12,6 +12,7 @@ import p.projects.springbookstore.dto.OrderDto;
 import p.projects.springbookstore.dto.OrderItemDto;
 import p.projects.springbookstore.dto.PlaceOrderRequestDto;
 import p.projects.springbookstore.dto.UpdateOrderStatusRequestDto;
+import p.projects.springbookstore.exception.EmptyShoppingCartException;
 import p.projects.springbookstore.exception.EntityNotFoundException;
 import p.projects.springbookstore.mapper.OrderItemMapper;
 import p.projects.springbookstore.mapper.OrderMapper;
@@ -43,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
         ShoppingCart cartForCurrentUser = shoppingCartService.getCartEntityForCurrentUser();
 
         if (cartForCurrentUser.getCartItems().isEmpty()) {
-            throw new IllegalStateException("Shopping cart is empty");
+            throw new EmptyShoppingCartException("Shopping cart is empty");
         }
         Order order = new Order();
         order.setUser(cartForCurrentUser.getUser());
@@ -70,8 +71,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderDto> getUserOrderHistory() {
-        Long userId = securityService.getAuthenticatedUser().getId();
-        List<Order> orders = orderRepository.findAllByUserId(userId);
+        Long userId = securityService.getAuthenticatedUserId();
+        List<Order> orders = orderRepository.findAllByUserIdOrderByOrderDateDesc(userId);
 
         return orders.stream()
                 .map(orderMapper::toDto)
@@ -94,11 +95,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderItemDto> getOrderItems(Long orderId) {
-        if (!orderRepository.existsById(orderId)) {
+        Long orderUserId = securityService.getAuthenticatedUserId();
+
+        List<OrderItem> orderItems = orderItemRepository.findByOrderIdAndOrderUserId(
+                orderId, orderUserId);
+
+        if (orderItems.isEmpty() && !orderRepository.existsByIdAndUserId(orderId, orderUserId)) {
             throw new EntityNotFoundException("Order not found with id: " + orderId);
         }
 
-        return orderItemRepository.findByOrderId(orderId).stream()
+        return orderItems.stream()
                 .map(orderItemMapper::toDto)
                 .toList();
     }
@@ -106,7 +112,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public OrderItemDto getOrderItem(Long orderId, Long itemId) {
-        OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+        Long orderUserId = securityService.getAuthenticatedUserId();
+        OrderItem orderItem = orderItemRepository.findByIdAndOrderIdAndOrderUserId(
+                itemId, orderId, orderUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
 
         return orderItemMapper.toDto(orderItem);

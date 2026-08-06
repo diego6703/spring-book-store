@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import p.projects.springbookstore.model.OrderItem;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
-    List<OrderItem> findByOrderId(Long orderId);
+    List<OrderItem> findByOrderIdAndOrderUserId(Long orderId, Long orderUserId);
 
-    Optional<OrderItem> findByIdAndOrderId(Long id, Long orderId);
+    Optional<OrderItem> findByIdAndOrderIdAndOrderUserId(Long itemId, Long orderId, Long userId);
 }

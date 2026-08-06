@@ -31,14 +31,15 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Place a new order",
             description = "Creates a new order based on the user's shopping cart")
-    public OrderDto placeOrder(@RequestBody PlaceOrderRequestDto requestDto) {
+    public OrderDto placeOrder(@RequestBody @Valid PlaceOrderRequestDto requestDto) {
         return orderService.placeOrder(requestDto);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get user order history",
-            description = "Returns a list of all orders placed by the currently authenticated user")
+            description = "Returns a list of all orders placed by the currently "
+                    + "authenticated user")
     public List<OrderDto> getOrderHistory() {
         return orderService.getUserOrderHistory();
     }
@@ -53,12 +54,12 @@ public class OrderController {
         return orderService.updateOrderStatus(id, requestDto);
     }
 
-    @GetMapping("/{id}/items")
+    @GetMapping("/{orderId}/items")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get order items",
             description = "Retrieves all items for a specific order")
-    public List<OrderItemDto> getOrderItems(@PathVariable Long id) {
-        return orderService.getOrderItems(id);
+    public List<OrderItemDto> getOrderItems(@PathVariable Long orderId) {
+        return orderService.getOrderItems(orderId);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")

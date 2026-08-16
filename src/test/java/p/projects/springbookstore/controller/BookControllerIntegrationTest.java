@@ -18,7 +18,7 @@ import p.projects.springbookstore.repository.CategoryRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class BookControllerTest {
+class BookControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

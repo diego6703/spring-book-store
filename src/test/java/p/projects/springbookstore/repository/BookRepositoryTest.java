@@ -27,7 +27,6 @@ class BookRepositoryTest {
     @Test
     @DisplayName("Find all books by category id should return page with one book")
     void findAllByCategoriesId_ShouldReturnBookPage() {
-        // Given
         Category category = new Category();
         category.setName("Programming");
         Category savedCategory = categoryRepository.save(category);

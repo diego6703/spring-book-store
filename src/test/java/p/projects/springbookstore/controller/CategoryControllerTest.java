@@ -153,4 +153,16 @@ public class CategoryControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray());
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("Should return 400 Bad Request when creating a category with invalid request body")
+    void createCategory_InvalidRequest_ReturnsBadRequest() throws Exception {
+        CreateCategoryRequestDto invalidRequestDto = new CreateCategoryRequestDto(null,null);
+
+        mockMvc.perform(post("/api/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidRequestDto)))
+                .andExpect(status().isBadRequest());
+    }
 }

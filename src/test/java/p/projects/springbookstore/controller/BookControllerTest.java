@@ -218,4 +218,16 @@ public class BookControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content[0].title").value("Clean Code"));
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("Should return 400 Bad Request when creating a book with invalid request body")
+    void createBook_InvalidRequest_ReturnsBadRequest() throws Exception {
+        CreateBookRequestDto invalidRequestDto = new CreateBookRequestDto();
+
+        mockMvc.perform(post("/api/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidRequestDto)))
+                .andExpect(status().isBadRequest());
+    }
 }

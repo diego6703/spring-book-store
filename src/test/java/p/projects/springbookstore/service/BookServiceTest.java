@@ -76,7 +76,7 @@ class BookServiceTest {
 
         assertThat(actualDto).isNotNull();
         assertThat(actualDto.getTitle()).isEqualTo("Clean Code");
-        verify(bookRepository, times(1)).save(book);
+        verify(bookRepository).save(book);
     }
 
     @Test
@@ -175,7 +175,7 @@ class BookServiceTest {
 
         bookService.deleteBookById(bookId);
 
-        verify(bookRepository, times(1)).deleteById(bookId);
+        verify(bookRepository).deleteById(bookId);
     }
 
     @Test

@@ -42,7 +42,6 @@ class CategoryServiceTest {
     @Test
     @DisplayName("Should return page of categories when findAll is called")
     void findAll_ShouldReturnPageOfCategories() {
-        // Given
         Pageable pageable = PageRequest.of(0, 10);
         Category category = new Category();
         category.setId(1L);
@@ -61,8 +60,8 @@ class CategoryServiceTest {
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent().get(0).name()).isEqualTo("Programming");
 
-        verify(categoryRepository, times(1)).findAll(pageable);
-        verify(categoryMapper, times(1)).toDto(category);
+        verify(categoryRepository).findAll(pageable);
+        verify(categoryMapper).toDto(category);
     }
 
     @Test
@@ -84,8 +83,8 @@ class CategoryServiceTest {
         assertThat(result.id()).isEqualTo(categoryId);
         assertThat(result.name()).isEqualTo("Fiction");
 
-        verify(categoryRepository, times(1)).findById(categoryId);
-        verify(categoryMapper, times(1)).toDto(category);
+        verify(categoryRepository).findById(categoryId);
+        verify(categoryMapper).toDto(category);
     }
 
     @Test
@@ -98,13 +97,12 @@ class CategoryServiceTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Can't find category by id: " + categoryId);
 
-        verify(categoryRepository, times(1)).findById(categoryId);
+        verify(categoryRepository).findById(categoryId);
     }
 
     @Test
     @DisplayName("Should save and return category dto when valid request is provided")
     void save_WithValidRequest_ShouldReturnSavedCategoryDto() {
-
         Category category = new Category();
         category.setName("Science");
 
@@ -127,9 +125,9 @@ class CategoryServiceTest {
         assertThat(result.id()).isEqualTo(1L);
         assertThat(result.name()).isEqualTo("Science");
 
-        verify(categoryMapper, times(1)).toEntity(requestDto);
-        verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1)).toDto(savedCategory);
+        verify(categoryMapper).toEntity(requestDto);
+        verify(categoryRepository).save(category);
+        verify(categoryMapper).toDto(savedCategory);
     }
 
     @Test
@@ -156,10 +154,10 @@ class CategoryServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.name()).isEqualTo("Updated Name");
 
-        verify(categoryRepository, times(1)).findById(categoryId);
-        verify(categoryMapper, times(1)).updateCategoryFromDto(requestDto, category);
-        verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1)).toDto(category);
+        verify(categoryRepository).findById(categoryId);
+        verify(categoryMapper).updateCategoryFromDto(requestDto, category);
+        verify(categoryRepository).save(category);
+        verify(categoryMapper).toDto(category);
     }
 
     @Test
@@ -174,7 +172,7 @@ class CategoryServiceTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Can't find category with id: " + categoryId);
 
-        verify(categoryRepository, times(1)).findById(categoryId);
+        verify(categoryRepository).findById(categoryId);
     }
 
     @Test
@@ -185,8 +183,8 @@ class CategoryServiceTest {
 
         categoryService.deleteById(categoryId);
 
-        verify(categoryRepository, times(1)).existsById(categoryId);
-        verify(categoryRepository, times(1)).deleteById(categoryId);
+        verify(categoryRepository).existsById(categoryId);
+        verify(categoryRepository).deleteById(categoryId);
     }
 
     @Test
@@ -199,6 +197,6 @@ class CategoryServiceTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Can't find category with id: " + categoryId);
 
-        verify(categoryRepository, times(1)).existsById(categoryId);
+        verify(categoryRepository).existsById(categoryId);
     }
 }

@@ -11,6 +11,8 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -54,6 +56,12 @@ class ShoppingCartServiceTest {
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartService;
 
+    @Captor
+    private ArgumentCaptor<ShoppingCart> cartCaptor;
+
+    @Captor
+    private ArgumentCaptor<CartItem> cartItemCaptor;
+
     @Test
     @DisplayName("Should return shopping cart when cart exists for current user")
     void getCartForCurrentUser_CartExists_ReturnsCartDto() {
@@ -89,7 +97,9 @@ class ShoppingCartServiceTest {
         ShoppingCartDto actualDto = shoppingCartService.getCartForCurrentUser();
 
         assertThat(actualDto).isNotNull();
-        verify(shoppingCartRepository).save(any(ShoppingCart.class));
+
+        verify(shoppingCartRepository).save(cartCaptor.capture());
+        assertThat(cartCaptor.getValue().getUser()).isEqualTo(user);
     }
 
     @Test
@@ -115,7 +125,12 @@ class ShoppingCartServiceTest {
         ShoppingCartDto actualDto = shoppingCartService.addBookToCart(requestDto);
 
         assertThat(actualDto).isNotNull();
-        verify(cartItemRepository).save(cartItem);
+
+        verify(cartItemRepository).save(cartItemCaptor.capture());
+
+        CartItem savedItem = cartItemCaptor.getValue();
+        assertThat(savedItem.getShoppingCart()).isEqualTo(cart);
+        assertThat(savedItem.getBook()).isEqualTo(book);
     }
 
     @Test
@@ -169,7 +184,9 @@ class ShoppingCartServiceTest {
     void updateItemQuantity_ExistingCartItem_ReturnsUpdatedCart() {
         Long userId = 1L;
         Long cartItemId = 5L;
-        UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(4);
+        int expectedQuantity = 4;
+
+        UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto(expectedQuantity);
         CartItem cartItem = new CartItem();
         ShoppingCart cart = new ShoppingCart();
         ShoppingCartDto expectedDto = new ShoppingCartDto(1L, userId, Set.of());
@@ -183,8 +200,13 @@ class ShoppingCartServiceTest {
         ShoppingCartDto actualDto = shoppingCartService.updateItemQuantity(cartItemId, requestDto);
 
         assertThat(actualDto).isNotNull();
-        assertThat(cartItem.getQuantity()).isEqualTo(4);
-        verify(cartItemRepository).save(cartItem);
+        assertThat(cartItem.getQuantity()).isEqualTo(expectedQuantity);
+
+        verify(cartItemRepository).save(cartItemCaptor.capture());
+
+        CartItem savedItem = cartItemCaptor.getValue();
+        assertThat(savedItem.getShoppingCart()).isEqualTo(cart);
+        assertThat(savedItem.getQuantity()).isEqualTo(expectedQuantity);
     }
 
     @Test
@@ -267,7 +289,9 @@ class ShoppingCartServiceTest {
         ShoppingCart actualCart = shoppingCartService.getCartEntityForCurrentUser();
 
         assertThat(actualCart).isNotNull();
-        verify(shoppingCartRepository).save(any(ShoppingCart.class));
+
+        verify(shoppingCartRepository).save(cartCaptor.capture());
+        assertThat(cartCaptor.getValue().getUser()).isEqualTo(user);
     }
 
     @Test

@@ -127,4 +127,12 @@ public class ShoppingCartControllerTest extends AbstractControllerTest {
                         .content(objectMapper.writeValueAsString(invalidRequestDto)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("Should allow ADMIN to get shopping cart")
+    void getCart_AsAdmin_ReturnsOk() throws Exception {
+        mockMvc.perform(get("/api/cart"))
+                .andExpect(status().isOk());
+    }
 }

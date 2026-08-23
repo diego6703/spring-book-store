@@ -1,0 +1,6 @@
+DELETE FROM cart_items;
+DELETE FROM shopping_carts;
+DELETE FROM user_roles;
+DELETE FROM users;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE shopping_carts ALTER COLUMN id RESTART WITH 1;
